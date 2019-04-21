@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hw1</title>
+    <style>
+        .grid{
+            display: inline-grid;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="grid">
+        <label>train Data</label>
+        <textarea rows="10" id="trainarea"></textarea>
+    </div>
+
+    <div class="grid">
+        <label>predition Data</label>
+        <textarea rows="10" id="predition"></textarea>
+    </div>
+
+    <div class="grid">
+        <input type="button" value="caculate" onclick="caculate()">
+    </div>
+
+    <div id="answers"></div>
+</body>
+
+<script>
+    var trainData = [];
+    var precditData = [];
+
+    var differenceList = [];
+
+    function caculate() {
+        trainArea = document.getElementById('trainarea');
+        lines = trainArea.value.split('\n');
+        for(i = 1;i < lines.length;i++) {
+            nodes = lines[i].split(',');
+            trainData.push([nodes[0], nodes[1]]);
+        }
+
+        predictArea = document.getElementById('predition');
+        lines = predictArea.value.split('\n');
+        for(i = 1;i < lines.length;i++) {
+            nodes = lines[i].split(',');
+            precditData.push([nodes[0], nodes[1]]);
+        }
+
+        for(i = 0;i < trainData.length;i++) {
+            difference = Math.abs(trainData[i][0] - trainData[i][1]);
+            differenceList.push(difference);
+        }
+
+        sort(differenceList);
+        precditData.forEach(function(item){
+            prediction(item[0], item[1]);
+        });
+    }
+
+    function sort(list) {
+        for (i = 0; i < list.length; i++) {
+            for (j = 0; j <list.length; j++) {
+                if(list[i] > list[j]) {
+                    temp = list[j];
+                    list[j] = list[i];
+                    list[i] =temp;
+                }
+            }
+        }
+    }
+
+    function prediction(node1, node2) {
+        node = document.createElement("P"); 
+        if ( Math.abs(node1 - node2) < differenceList[Math.round(differenceList.length/2)] ) {
+            node.innerHTML = 1;
+            document.getElementById("answers").appendChild(node);
+        }
+        else {
+            node.innerHTML = 0;
+            document.getElementById("answers").appendChild(node);
+        }
+    }
+
+</script>
+</html>
